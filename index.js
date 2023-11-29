@@ -1,5 +1,6 @@
-const express = require ("express");
+const express = require("express");
 const app = express();
+const cors = require("cors");
 
 // requiring another module
 const mongoose = require("mongoose");
@@ -11,6 +12,8 @@ const usersRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postsRoute = require("./routes/posts");
 
+// using cors 
+app.use(cors())
 // using dotenv 
 dotenv.config()
 
@@ -19,7 +22,7 @@ dotenv.config()
 async function connectToMongo() {
     await mongoose.connect("mongodb://127.0.0.1:27017/socialtube");
     console.log("Connected to mongoDB database ");
-} 
+}
 // calling the connectToMongo function with error handeling 
 connectToMongo().catch(err => console.log(err));
 
@@ -33,6 +36,6 @@ app.use("/api/users", usersRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postsRoute);
 
-app.listen(8000 , ()=> {
+app.listen(8000, () => {
     console.log("Backend server is running on port 8000 !");
 })
