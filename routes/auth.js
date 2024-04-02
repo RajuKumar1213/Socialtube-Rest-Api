@@ -28,14 +28,22 @@ router.post("/login", async (req, res) => {
     try {
         // finding user in the database 
         const user = await User.findOne({ email: req.body.email });
-        !user && res.status(404).json("User not found !");
+        // !user && return res.status(404).json("User not found !");
+        if(!user) {
+            return res.status(404).json("User not found !")
+        }
 
         //comparing password with the hash 
         const validatePassword = await bcrypt.compare(req.body.password, user.password);
-        !validatePassword && res.status(400).json("Wrong password");
+        // !validatePassword && res.status(400).json("Wrong password");
 
-        // if everything correct send the entire user
-        res.status(200).json(user);
+        // // if everything correct send the entire user
+        // res.status(200).json(user);
+        if(!validatePassword){
+           return res.status(400).json("Wrong password");
+        }else {
+           return res.status(200).json(user);
+        }
 
     } catch (error) {
         res.status(500).json(error);
